@@ -99,9 +99,9 @@
 			this.acc = "";
 		}
 		
-		print(startDepth, endDepth) {
-			if (startDepth == 0) {
-			var result = "<ul class = 'list-group'>" + this.current ;
+		print(c) {
+			var id_main = this.current.substr(0, 8)
+			var result = "<ul id =" + id_main + " " + "class = 'list-group'>" + this.current ;
 			
 //			
 //			this.branches.forEach(function(entry) {
@@ -112,22 +112,58 @@
 //				result += "<li class = 'list-group-item'>" + this.print + "</li>";
 //			});
 
-			if (endDepth > 0) {
-				this.branches.forEach(function(entry) {
-					//result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
-					if (startDepth > 0) {
-						result += entry.print(startDepth - 1, endDepth);
-					} else {
-						result += "<li class = 'list-group-item'>" + entry.print(0, endDepth - 1) + "</li>";
-					}
-				});
+//			this.branches.forEach(function(entry) {
+//					//result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
+//				if (c > 0) {
+//					result += "<li class = 'list-group-item' onclick='temp(this)' style='display:none'>" + entry.print(c + 1) + "</li>";
+//				}
+//				else { 
+//					result += "<li class = 'list-group-item' onclick='temp(this)' style='display:block'>" + entry.print(c + 1) + "</li>";
+//				}
+//					
+//			});
+			for (var i =0; i < this.branches.length; i += 1) {
+				var entry = this.branches[i];
+				var id = id_main + i;
+				if (c > 0) {
+					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); temp(this);' style='display:none'>" + entry.print(c + 1) + "</li>";
+				}
+				else { 
+					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); temp(this);' style='display:block'>" + entry.print(c + 1) + "</li>";
+				}
 			}
 			
+			
 			result += "</ul>";
-			}
+			
 			return result;
-		}
 		
+		
+		}
+	}
+	function temp(ob) {
+			// get all other sibling nodes and hide
+			// get this guys's parent node and hide
+			// show all children	
+//		console.log(ob.childNodes);
+//		console.log("------------");
+		var parent = ob.parent;
+		console.log(ob.id);
+		//parent.element.style.display = "none";
+		var children = ob.children[0].children;
+		for (var i = 0; i < children.length; i++) {
+			var child = children[i];
+			child.style.display = "block";
+
+		  // Do stuff
+		}
+							  
+	}
+	
+	class TreeNav {
+		constructor(aNode) {
+			this.tree = aNode;
+		}
 	}
 	
 	// Given the li in which the text of the node of interst resides
@@ -141,8 +177,9 @@
 	var achievements = new Node("Achievements", [a1, a2], root);
 		
 	
-		var h1 = new Node("Animation", [], hobbies);
-			var a1 = new Node("League video", [], h1);
+		
+		var a1 = new Node("League video", [], h1);
+	var h1 = new Node("Animation", [a1], hobbies);
 		var h2 = new Node("WebDesign", [], hobbies);
 	var hobbies = new Node("Hobbies", [h1, h2], root);
 		
@@ -150,7 +187,8 @@
 	var goals = new Node("Goals", [], root);
 	
 	//var resumeElements = ;
-	var root = new Node("Resume", [achievements, hobbies, goals], null);
+	var root = new Node("Resume", [achievements, hobbies, goals], root);
+
 	
 	function appendText() {
 //		var result = "";
@@ -162,7 +200,7 @@
 //			$("#canvas").append(result);
 //		}
 		//var result = "<ul class='list-group'> <li class = 'list-group-item'>Apple</li> <li class = 'list-group-item'>Banana</li> <li class =  'list-group-item'>Cat</li> <ul>"
-		$("#canvas").append(root.print(1,1));
+		$("#canvas").append(root.print(0));
 	}
 	
 	$("document").ready(function(){
