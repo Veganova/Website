@@ -1,0 +1,184 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Viraj Patil - Resume</title>
+	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+	<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+	<link href="css/mystyles.css" rel="stylesheet">
+	<!--<link href="css/bootstrap-social.css" rel="stylesheet"> </head>-->
+
+
+</head>
+<script>
+	function myFunction() {
+		var w = window.outerWidth;
+		var h = window.outerHeight;
+		var txt = "Window size: width=" + w + ", height=" + h;
+		console.log(txt);
+	}
+	
+	
+</script>
+
+<body onresize="myFunction()">
+	<nav class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+				<!--
+					<a class="navbar-brand" href="#" > 
+						<img alt="Brand" src="img/5.png" height="50px" width="50px" > 
+					</a> -->
+			</div>
+			<div id="navbar" class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Viraj</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-user"></span> About Me</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Resume</a></li>
+					<li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> 	Contact Me</a></li>
+				</ul>
+
+
+			</div>
+		</div>
+	</nav>
+
+	<header class="one jumbotron jumbotron-fluid">
+		<div class="container">
+			<div class="col-xs-12 col-sm-8">
+				<h2>Viraj Patil</h2>
+				<p>A site to tell you more about me and my future goals.</p>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<img src="img/Viraj_Patil_Photo.jpg" class="img-circle cborder">
+			</div>
+		</div>
+	</header>
+	<header class="two jumbotron jumbotron-fluid">
+		<div class="container">
+			
+			<div class="col-xs-12 col-sm-6 col-sm-push-6 ">
+				<h2>My Resume</h2>
+				<p>View a detailed summary of my past achievements.</p>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-sm-pull-6" id = "canvas">
+				<!--<img src="img/resume-overview.jpg" class="img-responsive">-->
+				
+			</div>
+			
+
+		</div>
+
+	</header>
+
+
+
+
+
+
+
+
+
+
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</body>
+<script>
+	
+	class Node {
+		constructor(current, branches, parent) {
+			this.current = current;
+			this.branches = branches;
+			this.parent = parent;
+			this.acc = "";
+		}
+		
+		print(startDepth, endDepth) {
+			if (startDepth == 0) {
+			var result = "<ul class = 'list-group'>" + this.current ;
+			
+//			
+//			this.branches.forEach(function(entry) {
+//				result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
+//				//result += "<li class = 'list-group-item'>" + entry.print() + "</li>";
+//			});
+//			this.branches.forEach(function(node) {
+//				result += "<li class = 'list-group-item'>" + this.print + "</li>";
+//			});
+
+			if (endDepth > 0) {
+				this.branches.forEach(function(entry) {
+					//result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
+					if (startDepth > 0) {
+						result += entry.print(startDepth - 1, endDepth);
+					} else {
+						result += "<li class = 'list-group-item'>" + entry.print(0, endDepth - 1) + "</li>";
+					}
+				});
+			}
+			
+			result += "</ul>";
+			}
+			return result;
+		}
+		
+	}
+	
+	// Given the li in which the text of the node of interst resides
+//	function printHelper(l) {
+//		if (this.root.find(e))
+//	}
+//	
+	// Preset constant
+		var a1 = new Node("Intership at Ovitas", [], achievements);
+		var a2 = new Node("Tutor at RSM", [], achievements);
+	var achievements = new Node("Achievements", [a1, a2], root);
+		
+	
+		var h1 = new Node("Animation", [], hobbies);
+			var a1 = new Node("League video", [], h1);
+		var h2 = new Node("WebDesign", [], hobbies);
+	var hobbies = new Node("Hobbies", [h1, h2], root);
+		
+	
+	var goals = new Node("Goals", [], root);
+	
+	//var resumeElements = ;
+	var root = new Node("Resume", [achievements, hobbies, goals], null);
+	
+	function appendText() {
+//		var result = "";
+//		console.log($("#canvas").children);
+//		for (var i = 0; i < resumeElements.length; i++) {
+//			var el = resumeElements[i];
+//		  	result = "<p>" + el  + "</p>"; // Create text with HTML
+//			
+//			$("#canvas").append(result);
+//		}
+		//var result = "<ul class='list-group'> <li class = 'list-group-item'>Apple</li> <li class = 'list-group-item'>Banana</li> <li class =  'list-group-item'>Cat</li> <ul>"
+		$("#canvas").append(root.print(1,1));
+	}
+	
+	$("document").ready(function(){
+		
+		
+		
+	});
+	$("#canvas").ready(appendText());
+	
+
+	
+	
+	
+	
+	</script>
+	
+	
+	
+</html>

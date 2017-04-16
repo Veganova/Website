@@ -1,0 +1,17 @@
+
+
+.navbar-default
+{
+	/*background:#905b5b;*/
+	background:#92A1A8;
+	
+}
+
+.navbar ul li a{
+    color: blue;
+}
+
+
+body{
+	padding-top:50px;
+}
