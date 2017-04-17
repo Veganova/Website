@@ -75,16 +75,7 @@
 		</div>
 
 	</header>
-
-
-
-
-
-
-
-
-
-
+	
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -99,33 +90,17 @@
 			this.acc = "";
 		}
 		
+		// Initial print.. forms the whole
 		print(c) {
 			var id_main = this.current.substr(0, 8)
 			var result = "<ul id =" + id_main + " " + "class = 'list-group'>" + this.current ;
 			
-//			
-//			this.branches.forEach(function(entry) {
-//				result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
-//				//result += "<li class = 'list-group-item'>" + entry.print() + "</li>";
-//			});
-//			this.branches.forEach(function(node) {
-//				result += "<li class = 'list-group-item'>" + this.print + "</li>";
-//			});
 
-//			this.branches.forEach(function(entry) {
-//					//result += "<li class = 'list-group-item' onclick = ' (this.innerHTML) = root.branches[0].print()'>" + entry.current + "</li>";
-//				if (c > 0) {
-//					result += "<li class = 'list-group-item' onclick='temp(this)' style='display:none'>" + entry.print(c + 1) + "</li>";
-//				}
-//				else { 
-//					result += "<li class = 'list-group-item' onclick='temp(this)' style='display:block'>" + entry.print(c + 1) + "</li>";
-//				}
-//					
-//			});
 			for (var i =0; i < this.branches.length; i += 1) {
 				var entry = this.branches[i];
 				var id = id_main + i;
 				if (c > 0) {
+					// some people recommending event.preventDefault(); instead but it did not work
 					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); temp(this);' style='display:none'>" + entry.print(c + 1) + "</li>";
 				}
 				else { 
@@ -147,9 +122,7 @@
 			// show all children	
 //		console.log(ob.childNodes);
 //		console.log("------------");
-		var parent = ob.parent;
-		console.log(ob.id);
-		//parent.element.style.display = "none";
+		
 		var children = ob.children[0].children;
 		for (var i = 0; i < children.length; i++) {
 			var child = children[i];
@@ -157,7 +130,7 @@
 
 		  // Do stuff
 		}
-							  
+		document.getElementById(ob.id).parentElement.innerHTML = document.getElementById(ob.id).innerHTML;							  
 	}
 	
 	class TreeNav {
@@ -191,23 +164,13 @@
 
 	
 	function appendText() {
-//		var result = "";
-//		console.log($("#canvas").children);
-//		for (var i = 0; i < resumeElements.length; i++) {
-//			var el = resumeElements[i];
-//		  	result = "<p>" + el  + "</p>"; // Create text with HTML
-//			
-//			$("#canvas").append(result);
-//		}
-		//var result = "<ul class='list-group'> <li class = 'list-group-item'>Apple</li> <li class = 'list-group-item'>Banana</li> <li class =  'list-group-item'>Cat</li> <ul>"
-		$("#canvas").append(root.print(0));
+		var result = root.print(0);
+
+		//$("#canvas").append(result);
+		document.getElementById("canvas").innerHTML = result;
 	}
 	
-	$("document").ready(function(){
-		
-		
-		
-	});
+
 	$("#canvas").ready(appendText());
 	
 
