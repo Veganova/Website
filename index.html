@@ -62,12 +62,15 @@
 	<header class="two jumbotron jumbotron-fluid">
 		<div class="container">
 			
-			<div class="col-xs-12 col-sm-6 col-sm-push-6 ">
+			<div class="col-xs-12 col-sm-1 col-sm-push-6">
+				<button id = "back" onclick = "backOut(canvas)" type = "button"  class = "btn btn-primary btn-lg">BACK</button>
+			</div>
+			<div class="col-xs-12 col-sm-5 col-sm-push-6 ">
 				<h2>My Resume</h2>
 				<p>View a detailed summary of my past achievements.</p>
 			</div>
+			
 			<div class="col-xs-12 col-sm-6 col-sm-pull-6" id = "canvas">
-				<!--<img src="img/resume-overview.jpg" class="img-responsive">-->
 				
 			</div>
 			
@@ -87,10 +90,9 @@
 			this.current = current;
 			this.branches = branches;
 			this.parent = parent;
-			this.acc = "";
 		}
 		
-		// Initial print.. forms the whole
+		// Prints at the this node
 		print(c) {
 			var id_main = this.current.substr(0, 8)
 			var result = "<ul id =" + id_main + " " + "class = 'list-group'>" + this.current ;
@@ -99,12 +101,8 @@
 			for (var i =0; i < this.branches.length; i += 1) {
 				var entry = this.branches[i];
 				var id = id_main + i;
-				if (c > 0) {
-					// some people recommending event.preventDefault(); instead but it did not work
-					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); temp(this);' style='display:none'>" + entry.print(c + 1) + "</li>";
-				}
-				else { 
-					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); temp(this);' style='display:block'>" + entry.print(c + 1) + "</li>";
+				if (c == 0) {
+					result += "<li id =" + id + " " + "class = 'list-group-item' onclick='event.stopPropagation(); goIn(this);' style='display:block'>" + entry.print(c + 1) + "</li>";
 				}
 			}
 			
@@ -115,56 +113,114 @@
 		
 		
 		}
-	}
-	function temp(ob) {
-			// get all other sibling nodes and hide
-			// get this guys's parent node and hide
-			// show all children	
-//		console.log(ob.childNodes);
-//		console.log("------------");
 		
-		var children = ob.children[0].children;
-		for (var i = 0; i < children.length; i++) {
-			var child = children[i];
-			child.style.display = "block";
-
-		  // Do stuff
+		printAtID(id) {
+			var id_main = this.current.substr(0, 8)
+			var result = "";
+			if (id === id_main) {
+				result = this.print(0);
+			} else {
+				// Go down each branch - perhaps optimize this later so that it goes down the correct branch from the start (sort the branches?)
+				for (var i = 0; i < this.branches.length; i += 1) {
+					var idTemp = id_main + i;
+					var entry = this.branches[i];
+					
+					if (idTemp === id) {
+						result = entry.print(0);
+						break;
+					} else {
+						entry.printAtID(id);
+					}
+				}
+			}
+			if (!(result === "")) {
+				console.log(id);
+				document.getElementById(id).parentElement.parentElement.innerHTML =  result;
+			}
 		}
-		document.getElementById(ob.id).parentElement.innerHTML = document.getElementById(ob.id).innerHTML;							  
+		// Problem - li and ul - two layers of parent stuff to traverse
+		
+		printBackAtID(id) {
+			var id_main = this.current.substr(0, 8)
+			var result = "";
+			console.log(id);
+			if (id === id_main) {
+				
+				result = this.parent.print(0);
+				console.log(entry.parent.current);
+						
+			} else {
+				// Go down each branch - perhaps optimize this later so that it goes down the correct branch from the start (sort the branches?)
+				for (var i = 0; i < this.branches.length; i += 1) {
+					var idTemp = id_main + i;
+					var entry = this.branches[i];
+					
+					if (idTemp === id) {
+						result = entry.parent.print(0);
+						console.log(entry.parent.current);
+						break;
+					} else {
+						entry.printBackAtID(id);
+					}
+				}
+			}
+			if (!(result === "")) {
+				document.getElementById(id).innerHTML =  result;
+			}
+		}
 	}
 	
-	class TreeNav {
-		constructor(aNode) {
-			this.tree = aNode;
-		}
+	function goIn(ob) {
+		console.log(root.branches[0].parent === root);
+		var id = ob.id;
+		root.printAtID(id);
+		
 	}
 	
-	// Given the li in which the text of the node of interst resides
-//	function printHelper(l) {
-//		if (this.root.find(e))
-//	}
-//	
+	function backOut(ob) {
+		console.log(root.branches[0].branches[0].parent === branches[0]);
+		var id = ob.id;
+		//id = document.getElementById(id).children[0].children[0].id;
+		id = document.getElementById(id).firstChild.id;
+		root.printBackAtID(id);
+	}
+	
+	
 	// Preset constant
-		var a1 = new Node("Intership at Ovitas", [], achievements);
-		var a2 = new Node("Tutor at RSM", [], achievements);
-	var achievements = new Node("Achievements", [a1, a2], root);
+	var a1, a2, achievements, a2_1, h1, h2, hobbies, goals, root;
+	
+		 a1 = new Node("Intership at Ovitas", [], achievements);
+		 a2 = new Node("Tutor at RSM", [], achievements);
+	achievements = new Node("Achievements", [a1, a2], root);
 		
 	
-		
-		var a1 = new Node("League video", [], h1);
-	var h1 = new Node("Animation", [a1], hobbies);
-		var h2 = new Node("WebDesign", [], hobbies);
-	var hobbies = new Node("Hobbies", [h1, h2], root);
-		
+	 	a2_1 = new Node("League video", [], h1);
+	 h1 = new Node("Animation", [a2_1], hobbies);
+		 h2 = new Node("WebDesign", [], hobbies);
+	hobbies = new Node("Hobbies", [h1, h2], root);
 	
-	var goals = new Node("Goals", [], root);
 	
-	//var resumeElements = ;
-	var root = new Node("Resume", [achievements, hobbies, goals], root);
+	
+	goals = new Node("Goals", [], root);
+	
+	// resumeElements = ;
+	root = new Node("Resume", [achievements, hobbies, goals], root);
 
+	
+	achievements.parent = root;
+	a1.parent = achievements;
+	a2.parent = achievements;
+	
+	h1.parent = hobbies;
+	a2_1.parent = h1;
+	h2.parent = hobbies;
+	hobbies.parent = root;
+	
+	goals.parent = root;
+	root.parent = root;
 	
 	function appendText() {
-		var result = root.print(0);
+		 result = root.print(0);
 
 		//$("#canvas").append(result);
 		document.getElementById("canvas").innerHTML = result;
